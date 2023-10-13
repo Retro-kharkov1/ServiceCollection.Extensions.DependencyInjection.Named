@@ -4,12 +4,11 @@
 		<TargetFrameworks>net461;netstandard2.1</TargetFrameworks>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AssemblyVersion>1.0.1.0</AssemblyVersion>
-		<FileVersion>1.0.1.0</FileVersion>
-		<Company>JABIL inc</Company>
+		<FileVersion>1.0.1.0</FileVersion> 
 		<Authors>S Ihor Barinov</Authors>
 		<Description>Named DI</Description>
 		<RepositoryType />
-		<PackageTags>Named;DI</PackageTags>
+		<PackageTags>Named;DI;ServiceCollection;</PackageTags>
 		<IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
 	</PropertyGroup>
 

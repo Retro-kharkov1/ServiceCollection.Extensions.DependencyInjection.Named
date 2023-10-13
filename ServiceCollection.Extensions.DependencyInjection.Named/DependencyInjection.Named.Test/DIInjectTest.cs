@@ -13,7 +13,7 @@ namespace Analytics.Linq.Core.Test
         [SetUp]
         public void Setup()
         {
-            ServiceProvider = InitClient(new ServiceCollection())
+            ServiceProvider = InitClient(new Microsoft.Extensions.DependencyInjection.ServiceCollection())
                 .AddNamedInjectedServices()
            .BuildServiceProvider();
         }
