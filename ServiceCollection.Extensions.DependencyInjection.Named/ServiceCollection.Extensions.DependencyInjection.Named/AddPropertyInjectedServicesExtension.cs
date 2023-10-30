@@ -37,17 +37,13 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                     implementationFactory?.GetType()
                         ?.GenericTypeArguments
                         ?.LastOrDefault() ??
-                    implementationInstance?.GetType(); 
+                    implementationInstance?.GetType();
 
                 if (implementationType is null)
-                {
                     continue;
-                }
 
                 if (typeof(INamedServiceFactory).IsAssignableFrom(implementationType))
-                {
                     continue;
-                }
 
 
                 // Getting type from factory method if it's not getted earlier
@@ -57,7 +53,7 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                         ?.GetType()
                         ?.GetField(PROPERTY_NAME_OF_TYPE_IN_TARGET_IN_FACTORY_METHOD)
                         ?.GetValue(implementationFactory?.Target) as Type;
-                } 
+                }
 
 
                 Func<IServiceProvider, object> createInstanceFunc;
@@ -89,14 +85,15 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                         var ctorParameters = implementationType.GetConstructors()
                             .First()
                             .GetParameters()
-                            .Select(x => {
+                            .Select(x =>
+                            {
 
                                 var attr = x.GetCustomAttribute(typeof(NamedAttribute), true) as NamedAttribute;
                                 if (attr == null)
                                     return sp.GetRequiredService(x.ParameterType);
                                 else
                                     return sp.GetNamedService(x.ParameterType, attr.Name);
-                                })
+                            })
                             .ToArray();
 
                         var serviceInstance = Activator.CreateInstance(implementationType, ctorParameters);
@@ -118,14 +115,19 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                     // Searching injectable properties in dependency implementation type
                     var injectableProperties = implementationType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                         .Where(x => x.CanWrite && x.GetCustomAttributes(typeof(InjectAttribute), false).Any())
-                        .ToList(); 
+                        .ToList();
+
 
 
                     // Assigning dependencies
                     foreach (var injectableProperty in injectableProperties)
                     {
-                        // Get dependency implementation
-                        var dependencyInstance = sp.GetService(injectableProperty.PropertyType);
+                        var attr = injectableProperty.GetCustomAttribute(typeof(NamedAttribute), true) as NamedAttribute;
+                        object dependencyInstance = null;
+                        if (attr == null)
+                            dependencyInstance = sp.GetService(injectableProperty.PropertyType);                       
+                        else
+                            dependencyInstance = sp.GetNamedService(injectableProperty.PropertyType, attr.Name);
 
                         if (dependencyInstance is null)
                         {

@@ -129,12 +129,5 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                     break;
             }
         }
-         
-
-        public static IServiceProvider BuildNamedServiceProvider(this IServiceCollection services)=>
-            new NamedServiceProviderFactory()
-            .CreateServiceProvider(new NamedServiceProviderFactory.Builder(services)
-                .AddInjectAttribute<InjectAttribute>()
-                .AddInjectAttribute<NamedAttribute>());
     }
 }
