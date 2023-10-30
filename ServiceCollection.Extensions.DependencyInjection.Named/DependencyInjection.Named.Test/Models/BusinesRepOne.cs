@@ -12,6 +12,7 @@ namespace Analytics.Linq.Core.Test.Models
         public BusinesRepOne([Named(Consts.Name1)] IRepository repository) {
             this.RepositoryName = repository.Name;
         }
+
         public string RepositoryName { get; private set; }
     }
 }
