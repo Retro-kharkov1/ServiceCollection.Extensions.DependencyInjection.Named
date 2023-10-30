@@ -1,4 +1,4 @@
-#Named bindings
+# Named bindings
 It wokds as extenstions for service collection 
 use `AddNamed...` functions and finiehs with `AddNamedInjectedServices` call
 
