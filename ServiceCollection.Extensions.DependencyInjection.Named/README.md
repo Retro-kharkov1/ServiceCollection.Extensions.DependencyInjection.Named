@@ -1,5 +1,5 @@
 # Named bindings
-It wokds as extenstions for service collection 
+It works as extenstions for service collection 
 use `AddNamed...` functions and finiehs with `AddNamedInjectedServices` call
 
 ```CSharp
@@ -33,3 +33,5 @@ Class examples use `Named` and `Inject` attribute
         public IRepository Repository { get; set; }
     }
 ```
+
+HttpClient builder extened with named 
