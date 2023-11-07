@@ -3,17 +3,18 @@
 	<PropertyGroup>
 		<TargetFrameworks>net461;netstandard2.1</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion> 
+		<AssemblyVersion>1.1.1</AssemblyVersion>
+		<FileVersion>$(AssemblyVersion)</FileVersion> 
 		<Authors>Ihor Barinov</Authors>
-		<Description>Service collection extension for property injection and named injection</Description>
+		<Description>Service collection extension for property injection, named injection, http client</Description>
 		<RepositoryType />
-		<PackageTags>Named;DI;ServiceCollection;Property Injection;Named Injection</PackageTags>
+		<PackageTags>Named;DI;ServiceCollection;Injection;Property;HttpClient</PackageTags>
 		<IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/Retro-kharkov1/ServiceCollection.Extensions.DependencyInjection.Named</PackageProjectUrl>
 		<Copyright></Copyright>
+		<Version>$(AssemblyVersion)</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,6 +30,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 	</ItemGroup>
 
 </Project>
