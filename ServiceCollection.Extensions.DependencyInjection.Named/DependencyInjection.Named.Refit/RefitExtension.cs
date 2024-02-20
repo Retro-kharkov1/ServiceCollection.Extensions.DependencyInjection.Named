@@ -37,8 +37,42 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named.Refit
             services
                 .AddNamedSingleton(provider => new SettingsFor<T>(settingsAction?.Invoke(provider)), name)
                 .AddNamedSingleton(provider => RequestBuilder.ForType<T>(provider.GetNamedService<SettingsFor<T>>(name).Settings), name)
-                .AddNamedSingleton(provider => 
-                    RestService.For<T>(provider.GetNamedService<HttpClient>(name), provider.GetNamedService<IRequestBuilder<T>>(name)), name)
-                .AddHttpClient(name);
+                //.AddNamedSingleton(provider => 
+                //    RestService.For<T>(provider.GetNamedService<HttpClient>(name), provider.GetNamedService<IRequestBuilder<T>>(name)), name)
+                .AddHttpClient(name) 
+                .ConfigureHttpMessageHandlerBuilder(builder =>
+                {
+                    var settings = builder.Services.GetNamedService<SettingsFor<T>>(name)?.Settings;
+                    var innerHandler = CreateInnerHandlerIfProvided(settings);
+                    // check to see if user provided custom auth token
+                    if (innerHandler != null)
+                    {
+                        builder.PrimaryHandler = innerHandler;
+                    }
+                })
+                .AddNamedTypedClient(name ,(client, serviceProvider) => RestService.For<T>(client, serviceProvider.GetNamedService<IRequestBuilder<T>>(name)));
+
+        static HttpMessageHandler CreateInnerHandlerIfProvided(RefitSettings settings)
+        {
+            HttpMessageHandler innerHandler = null;
+            if (settings != null)
+            {
+                if (settings.HttpMessageHandlerFactory != null)
+                {
+                    innerHandler = settings.HttpMessageHandlerFactory();
+                }
+
+                if (settings.AuthorizationHeaderValueGetter != null)
+                {
+                    innerHandler = new AuthenticatedHttpClientHandler(settings.AuthorizationHeaderValueGetter, innerHandler);
+                }
+                else if (settings.AuthorizationHeaderValueWithParamGetter != null)
+                {
+                    innerHandler = new AuthenticatedParameterizedHttpClientHandler(settings.AuthorizationHeaderValueWithParamGetter, innerHandler);
+                }
+            }
+
+            return innerHandler;
+        }
     }
 }

@@ -89,7 +89,31 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
 
             ITypedHttpClientFactory<TImplementation> typedClientFactory = s.GetNamedService<ITypedHttpClientFactory<TImplementation>>(name);
             return typedClientFactory.CreateClient(httpClient);
-        } 
+        }
+
+        public static IHttpClientBuilder AddNamedTypedClient<TClient>(this IHttpClientBuilder builder, string name, Func<HttpClient, IServiceProvider, TClient> factory)
+         where TClient : class
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            if (factory == null)
+            {
+                throw new ArgumentNullException(nameof(factory));
+            } 
+
+            builder.Services.AddNamedTransient<TClient>(s =>
+            {
+                IHttpClientFactory httpClientFactory = s.GetRequiredService<IHttpClientFactory>();
+                HttpClient httpClient = httpClientFactory.CreateClient(builder.Name);
+
+                return factory(httpClient, s);
+            }, name);
+
+            return builder;
+        }
 
     }
 }
