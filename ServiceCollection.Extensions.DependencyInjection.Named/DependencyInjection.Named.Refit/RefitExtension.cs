@@ -50,7 +50,7 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named.Refit
                         builder.PrimaryHandler = innerHandler;
                     }
                 })
-                .AddNamedTypedClient(name ,(client, serviceProvider) => RestService.For<T>(client, serviceProvider.GetNamedService<IRequestBuilder<T>>(name)));
+                .AddNamedTypedClient((client, serviceProvider) => RestService.For<T>(client, serviceProvider.GetNamedService<IRequestBuilder<T>>(name)));
 
         static HttpMessageHandler CreateInnerHandlerIfProvided(RefitSettings settings)
         {
