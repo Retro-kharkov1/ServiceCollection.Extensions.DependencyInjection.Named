@@ -39,8 +39,8 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
             if (builder == null) 
                 throw new ArgumentNullException(nameof(builder)); 
 
-            builder.Services.Configure<HttpClientFactoryOptions>(builder.Name, options =>
-            {
+            builder.Services.Configure<HttpClientFactoryOptions>(name, options =>
+            {   
                 options.HttpMessageHandlerBuilderActions.Add(b => b.AdditionalHandlers.Add(b.Services.GetNamedService<THandler>(name)));
             });
 
@@ -91,7 +91,7 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
             return typedClientFactory.CreateClient(httpClient);
         }
 
-        public static IHttpClientBuilder AddNamedTypedClient<TClient>(this IHttpClientBuilder builder, string name, Func<HttpClient, IServiceProvider, TClient> factory)
+        public static IHttpClientBuilder AddNamedTypedClient<TClient>(this IHttpClientBuilder builder, Func<HttpClient, IServiceProvider, TClient> factory)
          where TClient : class
         {
             if (builder == null)
@@ -110,10 +110,11 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                 HttpClient httpClient = httpClientFactory.CreateClient(builder.Name);
 
                 return factory(httpClient, s);
-            }, name);
+            }, builder.Name);
 
             return builder;
         }
+         
 
     }
 }
