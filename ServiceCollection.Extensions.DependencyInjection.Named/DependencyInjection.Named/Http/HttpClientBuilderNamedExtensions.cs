@@ -39,8 +39,8 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
             if (builder == null) 
                 throw new ArgumentNullException(nameof(builder)); 
 
-            builder.Services.Configure<HttpClientFactoryOptions>(name, options =>
-            {   
+            builder.Services.Configure<HttpClientFactoryOptions>(builder.Name, options =>
+            {
                 options.HttpMessageHandlerBuilderActions.Add(b => b.AdditionalHandlers.Add(b.Services.GetNamedService<THandler>(name)));
             });
 

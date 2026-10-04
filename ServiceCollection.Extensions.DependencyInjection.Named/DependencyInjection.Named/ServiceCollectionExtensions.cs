@@ -81,7 +81,19 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                 serviceCollection.AddSingleton(factory);
             }
 
-            factory.Register<TImplementation>(name);
+            // If TImplementation has already been registered in the container - by an earlier
+            // named registration (possibly for a different TService/name), or by the caller
+            // directly - resolving through the shared, type-keyed sp.GetService<TImplementation>()
+            // would silently hand back THAT OTHER registration's instance instead of this one's
+            // (cross-injection). Detect the collision up front and have this named slot build its
+            // own instance independently instead of adding another container descriptor for the
+            // same concrete type. See docs/architecture/overview.md <caveats>.
+            bool implementationAlreadyRegistered = serviceCollection.Any(x => x.ServiceType == typeof(TImplementation));
+
+            factory.Register<TImplementation>(name, lifetime, implementationAlreadyRegistered);
+
+            if (implementationAlreadyRegistered)
+                return;
 
             // We don't want to register using the service descriptor since that would mean multiple TService types
             // would be registered causing resolution problems for non-named registrations.
@@ -112,7 +124,7 @@ namespace ServiceCollection.Extensions.DependencyInjection.Named
                 serviceCollection.AddSingleton(factory);
             }
 
-            factory.Register<TService>(name, func);
+            factory.Register<TService>(name, func, lifetime);
 
             // We don't want to register using the service descriptor since that would mean multiple TService types
             // would be registered causing resolution problems for non-named registrations.

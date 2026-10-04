@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net461;netstandard2.1</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<AssemblyVersion>1.1.1</AssemblyVersion>
+		<AssemblyVersion>1.2.2</AssemblyVersion>
 		<FileVersion>$(AssemblyVersion)</FileVersion> 
 		<Authors>Retro-kharkov1</Authors>
 		<Description>Service collection extension for property injection, named injection, http client</Description>

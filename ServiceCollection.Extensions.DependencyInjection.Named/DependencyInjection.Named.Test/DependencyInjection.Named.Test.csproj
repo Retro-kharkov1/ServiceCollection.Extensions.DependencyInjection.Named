@@ -14,10 +14,12 @@
 		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
 		<PackageReference Include="NUnit.Analyzers" Version="3.6.1" />
 		<PackageReference Include="coverlet.collector" Version="3.2.0" />
+		<PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\DependencyInjection.Named\DependencyInjection.Named.csproj" />
+		<ProjectReference Include="..\DependencyInjection.Named.Refit\DependencyInjection.Named.Refit.csproj" />
 	</ItemGroup>
-	
+
 </Project>
